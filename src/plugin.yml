@@ -1,0 +1,9 @@
+name: EnchBook
+main: tk.shanebee.enchBook.EnchBook
+version: 1.0.0
+author: ShaneBee
+api-version: 1.13
+commands:
+  enchbook:
+    description: enchant a new book
+    aliases: bookench
