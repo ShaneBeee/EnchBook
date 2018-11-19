@@ -3,12 +3,13 @@ package tk.shanebee.enchBook;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import tk.shanebee.enchBook.events.AnvilPrepare;
+import tk.shanebee.enchBook.events.TabComplete;
 import tk.shanebee.enchBook.metrics.Metrics;
 
 public class EnchBook extends JavaPlugin {
 
     private FileConfiguration config = this.getConfig();
-
 
     @Override
     @SuppressWarnings("unused")
@@ -22,7 +23,8 @@ public class EnchBook extends JavaPlugin {
                 + ChatColor.GRAY + "] ";
         getServer().getConsoleSender().sendMessage(prefix + ChatColor.GREEN + "LOADED SUCCESSFULLY");
         this.getCommand("enchbook").setExecutor(new Commands(this));
-        this.getCommand("enchbook").setTabCompleter(new Commands(this));
+        this.getCommand("enchbook").setTabCompleter(new TabComplete());
+        this.getServer().getPluginManager().registerEvents(new AnvilPrepare(this), this);
     }
 
     @Override
