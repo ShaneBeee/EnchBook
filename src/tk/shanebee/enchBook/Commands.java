@@ -87,39 +87,40 @@ public class Commands implements CommandExecutor, TabCompleter {
                 }
             }
         }
-        if(args[0].equalsIgnoreCase("reload")) {
-            plugin.reloadConfig();
-            Config.loadConfig(plugin.getConfig());
-            plugin.saveConfig();
-            sender.sendMessage(prefix + ChatColor.GREEN + " Config successfully reloaded");
-            return true;
-        } else if(args[0].equalsIgnoreCase("about")) {
-            sender.sendMessage("");
-            sender.sendMessage("" + ChatColor.RED + ChatColor.BOLD + ChatColor.UNDERLINE + "ENCHBOOK ABOUT:");
-            sender.sendMessage("");
-            sender.sendMessage(ChatColor.GOLD + "Version: " + ChatColor.AQUA + plugin.getDescription().getVersion());
-            sender.sendMessage(ChatColor.GOLD + "Author: " + ChatColor.AQUA + plugin.getDescription().getAuthors());
-            sender.sendMessage(ChatColor.GOLD + "Website: " + ChatColor.AQUA + plugin.getDescription().getWebsite());
-            return true;
-        } else if(args[0].equalsIgnoreCase("help")) {
-            sender.sendMessage("");
-            sender.sendMessage("" + ChatColor.RED + ChatColor.BOLD + ChatColor.UNDERLINE + "ENCHBOOK HELP:");
-            sender.sendMessage("");
-            sender.sendMessage(ChatColor.GOLD + "Commands:");
-            sender.sendMessage(ChatColor.AQUA + "/enchbook new <enchantment> <level> " + ChatColor.GRAY + "- Gives yourself a new enchanted book");
-            sender.sendMessage(ChatColor.AQUA + "/enchbook add <enchantment> <level> " + ChatColor.GRAY + "- Adds an enchantment to the enchanted book in your hand");
-            sender.sendMessage(ChatColor.AQUA + "/enchbook reload " + ChatColor.GRAY + "- Reloads the config");
-            sender.sendMessage(ChatColor.AQUA + "/enchbook about " + ChatColor.GRAY + "- Some info about this plugin");
-            sender.sendMessage("");
-            sender.sendMessage(ChatColor.GOLD + "Command Aliases:");
-            sender.sendMessage(ChatColor.AQUA + "/bookench, /eb, /be");
+        if(args.length == 1) {
+            if (args[0].equalsIgnoreCase("reload")) {
+                plugin.reloadConfig();
+                Config.loadConfig(plugin.getConfig());
+                plugin.saveConfig();
+                sender.sendMessage(prefix + ChatColor.GREEN + " Config successfully reloaded");
+                return true;
+            } else if (args[0].equalsIgnoreCase("about")) {
+                sender.sendMessage("");
+                sender.sendMessage("" + ChatColor.RED + ChatColor.BOLD + ChatColor.UNDERLINE + "ENCHBOOK ABOUT:");
+                sender.sendMessage("");
+                sender.sendMessage(ChatColor.GOLD + "Version: " + ChatColor.AQUA + plugin.getDescription().getVersion());
+                sender.sendMessage(ChatColor.GOLD + "Author: " + ChatColor.AQUA + plugin.getDescription().getAuthors());
+                sender.sendMessage(ChatColor.GOLD + "Website: " + ChatColor.AQUA + plugin.getDescription().getWebsite());
+                return true;
+            } else if (args[0].equalsIgnoreCase("help")) {
+                sender.sendMessage("");
+                sender.sendMessage("" + ChatColor.RED + ChatColor.BOLD + ChatColor.UNDERLINE + "ENCHBOOK HELP:");
+                sender.sendMessage("");
+                sender.sendMessage(ChatColor.GOLD + "Commands:");
+                sender.sendMessage(ChatColor.AQUA + "/enchbook new <enchantment> <level> " + ChatColor.GRAY + "- Gives yourself a new enchanted book");
+                sender.sendMessage(ChatColor.AQUA + "/enchbook add <enchantment> <level> " + ChatColor.GRAY + "- Adds an enchantment to the enchanted book in your hand");
+                sender.sendMessage(ChatColor.AQUA + "/enchbook reload " + ChatColor.GRAY + "- Reloads the config");
+                sender.sendMessage(ChatColor.AQUA + "/enchbook about " + ChatColor.GRAY + "- Some info about this plugin");
+                sender.sendMessage("");
+                sender.sendMessage(ChatColor.GOLD + "Command Aliases:");
+                sender.sendMessage(ChatColor.AQUA + "/bookench, /eb, /be");
 
-            return true;
-        }
-        else {
-            sender.sendMessage(prefix + ChatColor.GOLD + " Correct Usage: /enchbook <about/add/new/reload>");
-            return true;
-        }
+                return true;
+            } else {
+                sender.sendMessage(prefix + ChatColor.GOLD + " Correct Usage: /enchbook <about/add/new/reload>");
+                return true;
+            }
+        } return true;
     }
 
     private static final List<String> COMMANDS = Arrays.asList("new", "add", "reload", "about", "help");
