@@ -3,7 +3,15 @@ main: tk.shanebee.enchBook.EnchBook
 version: 1.0.0
 author: ShaneBee
 api-version: 1.13
+website: https://ShaneBee.tk
 commands:
   enchbook:
     description: enchant a new book
-    aliases: bookench
+    aliases: [bookench, eb, be]
+    usage: /enchbook <about/add/new/reload>
+    permission: enchbook.admin
+
+permissions:
+  enchbook.admin:
+    description: Allows admins to use the enchbook commands
+    default: op
