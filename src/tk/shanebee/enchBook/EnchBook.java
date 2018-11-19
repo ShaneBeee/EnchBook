@@ -3,6 +3,7 @@ package tk.shanebee.enchBook;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import tk.shanebee.enchBook.metrics.Metrics;
 
 public class EnchBook extends JavaPlugin {
 
@@ -10,8 +11,9 @@ public class EnchBook extends JavaPlugin {
 
 
     @Override
+    @SuppressWarnings("unused")
     public void onEnable() {
-
+        Metrics metrics = new Metrics(this);
         Config.loadConfig(config);
         saveConfig();
 
