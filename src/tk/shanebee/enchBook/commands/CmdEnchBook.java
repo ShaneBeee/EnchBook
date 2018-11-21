@@ -1,4 +1,4 @@
-package tk.shanebee.enchBook;
+package tk.shanebee.enchBook.commands;
 
 
 import org.bukkit.ChatColor;
@@ -12,11 +12,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import tk.shanebee.enchBook.Config;
+import tk.shanebee.enchBook.EnchBook;
 
-public class Commands implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CmdEnchBook implements CommandExecutor {
 
     private static EnchBook plugin;
-    Commands(EnchBook instance) {
+    public CmdEnchBook(EnchBook instance) {
         plugin = instance;
     }
 
@@ -30,6 +35,49 @@ public class Commands implements CommandExecutor {
         if(sender instanceof Player) {
             if (args.length >= 2) {
                 Player player = (Player) sender;
+                Material hand = player.getInventory().getItemInMainHand().getType();
+
+                if(args[0].equalsIgnoreCase("rename")) {
+                    if (hand != Material.ENCHANTED_BOOK) {
+                        player.sendMessage(prefix + ChatColor.RED + " You can only rename an enchanted book");
+                        return true;
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 1; i < args.length; i++){
+                        sb.append(args[i]).append(" ");
+                    }
+                    String allArgs = sb.toString().trim();
+                    String newName = ChatColor.translateAlternateColorCodes('&', allArgs);
+                    ItemStack item = player.getInventory().getItemInMainHand();
+                    ItemMeta meta = item.getItemMeta();
+                    meta.setDisplayName(newName);
+                    item.setItemMeta(meta);
+                    player.sendMessage(prefix + ChatColor.GREEN + " You have successfully renamed your book to: " + newName);
+                    return true;
+                }
+                if(args[0].equalsIgnoreCase("addLore")) {
+                    if (hand != Material.ENCHANTED_BOOK) {
+                        player.sendMessage(prefix + ChatColor.RED + " You can only rename an enchanted book");
+                        return true;
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 1; i < args.length; i++){
+                        sb.append(args[i]).append(" ");
+                    }
+                    String allArgs = sb.toString().trim();
+                    String newLore = ChatColor.translateAlternateColorCodes('&', allArgs);
+
+                    ItemStack item = player.getInventory().getItemInMainHand();
+                    ItemMeta meta = item.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    if(meta.hasLore()) lore = meta.getLore();
+
+                    lore.add(newLore);
+                    meta.setLore(lore);
+                    item.setItemMeta(meta);
+                    player.sendMessage(prefix + ChatColor.GREEN + " You have successfully add lore to your book: " + newLore);
+                    return true;
+                }
                 String level = "";
                 int lvl = 1;
                 String enchant = args[1].replace("_", " ").toUpperCase();
@@ -52,7 +100,7 @@ public class Commands implements CommandExecutor {
                     return true;
                 }
 
-                if (args[0].equalsIgnoreCase("new")) {
+                if (args[0].equalsIgnoreCase("newbook")) {
                     ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
                     ItemMeta meta = book.getItemMeta();
                     ((EnchantmentStorageMeta) meta).addStoredEnchant(ench, lvl, true);
@@ -64,8 +112,8 @@ public class Commands implements CommandExecutor {
                     String msg = (ChatColor.translateAlternateColorCodes('&', string.replace("{level}", level).replace("{ench}", enchant)));
                     player.sendMessage(prefix + " " + msg);
 
-                } else if (args[0].equalsIgnoreCase("add")) {
-                    if (player.getInventory().getItemInMainHand().getType() != Material.ENCHANTED_BOOK) {
+                } else if (args[0].equalsIgnoreCase("addEnchant")) {
+                    if (hand != Material.ENCHANTED_BOOK) {
                         player.sendMessage(prefix + ChatColor.RED + " You can only add enchantments to enchanted books");
                         return true;
                     }
@@ -77,6 +125,40 @@ public class Commands implements CommandExecutor {
                     String string = plugin.getConfig().getString("Messages.Added Enchant");
                     String msg = (ChatColor.translateAlternateColorCodes('&', string.replace("{level}", level).replace("{ench}", enchant)));
                     player.sendMessage(prefix + " " + msg);
+                } else if(args[0].equalsIgnoreCase("removeEnchant")) {
+                    if (hand != Material.ENCHANTED_BOOK) {
+                        player.sendMessage(prefix + ChatColor.RED + " You can only remove enchantments from enchanted books");
+                        return true;
+                    }
+                    ItemStack book = player.getInventory().getItemInMainHand();
+                    ItemMeta meta = book.getItemMeta();
+                    if(!((EnchantmentStorageMeta) meta).hasStoredEnchant(ench)) {
+                        player.sendMessage(prefix + ChatColor.RED + " That book is not enchanted with " + ChatColor.AQUA + args[1].toUpperCase().replace("_", " "));
+                        return true;
+                    }
+                    ((EnchantmentStorageMeta) meta).removeStoredEnchant(ench);
+                    book.setItemMeta(meta);
+                    String string = plugin.getConfig().getString("Messages.Removed Enchant");
+                    String msg = (ChatColor.translateAlternateColorCodes('&', string.replace("{ench}", enchant)));
+                    player.sendMessage(prefix + " " + msg);
+                }
+            } else if(args.length == 1) {
+                if(args[0].equalsIgnoreCase("removeLore")) {
+                    Player player = ((Player) sender);
+                    ItemStack hand = player.getInventory().getItemInMainHand();
+                    if (hand.getType() != Material.ENCHANTED_BOOK) {
+                        player.sendMessage(prefix + ChatColor.RED + " You can only remove lore from an enchanted book");
+                        return true;
+                    }
+                    ItemMeta meta = hand.getItemMeta();
+                    if(!meta.hasLore()) {
+                        player.sendMessage(prefix + ChatColor.RED + " This book does not have any more");
+                        return true;
+                    }
+                    meta.setLore(null);
+                    hand.setItemMeta(meta);
+                    player.sendMessage(prefix + ChatColor.GREEN + " You have successfully remove all lore from your book");
+                    return true;
                 }
             }
         }
