@@ -166,7 +166,7 @@ public class CmdEnchBook implements CommandExecutor {
         if(args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 plugin.reloadConfig();
-                Config.loadConfig(plugin.getConfig());
+                plugin.reloadPluginConfig();
                 plugin.saveConfig();
                 sender.sendMessage(prefix + ChatColor.GREEN + " Config successfully reloaded");
                 return true;

@@ -6,11 +6,19 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 public class Config implements Listener {
 
-    public static void loadConfig(FileConfiguration config) {
-        PluginDescriptionFile pdfFile = EnchBook.getPlugin(EnchBook.class).getDescription();
+    final String PREFIX;
+    public final boolean SAFE_ENCHANTS;
+    public final boolean SAFE_BOOKS;
+
+    final String MSG_NO_PERM;
+
+    Config(EnchBook plugin) {
+        FileConfiguration config = plugin.getConfig();
+        PluginDescriptionFile pdfFile = plugin.getDescription();
 
         config.addDefault("Options.Prefix", "&bEnchBook");
         config.addDefault("Options.Safe Enchants", true);
+        config.addDefault("Options.Safe Books", true);
 
 
 
@@ -24,6 +32,15 @@ public class Config implements Listener {
         config.options().header("EnchBook\n" + "Version: " + pdfFile.getVersion() + "\n\n" +
                 "SAFE ENCHANTS:\n" + "If safe enchants is true, you will only be able to enchant books with the max level of said enchant\n" +
                 "If it is false, you can enchant to your hearts desire, and also enchant tools/weapons/armor in the anvil with them\n\n" +
+                "SAFE BOOKS:\n" + "If safe books is true, players will not be able to join 2 of the same books (which would increase the level by 1)\n" +
+                "to increase the level over the max possible level for that enchant\n\n" +
                 "VARIABLES FOR MESSAGES:\n" + "{ench} = Enchantment\n" + "{level} = Level of Enchantment" + "\n\n");
+        plugin.saveConfig();
+
+        this.PREFIX = config.getString("Options.Prefix");
+        this.SAFE_ENCHANTS = config.getBoolean("Options.Safe Enchants");
+        this.SAFE_BOOKS = config.getBoolean("Options.Safe Books");
+        this.MSG_NO_PERM = config.getString("Messages.No Permission");
     }
+
 }
