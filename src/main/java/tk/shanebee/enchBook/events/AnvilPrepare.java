@@ -34,9 +34,12 @@ public class AnvilPrepare implements Listener {
                     ItemMeta meta = e.getInventory().getItem(1).getItemMeta();
                     for (Enchantment enchantment : ((EnchantmentStorageMeta) meta).getStoredEnchants().keySet()) {
                         if (enchantment.canEnchantItem(item)) {
-                            int lvl = ((EnchantmentStorageMeta) meta).getStoredEnchantLevel(enchantment);
-                            if (item.getEnchantmentLevel(enchantment) < lvl) {
-                                result.addUnsafeEnchantment(enchantment, lvl);
+                            int bookLevel = ((EnchantmentStorageMeta) meta).getStoredEnchantLevel(enchantment);
+                            int itemLevel = item.getEnchantmentLevel(enchantment);
+                            if (itemLevel < bookLevel) {
+                                result.addUnsafeEnchantment(enchantment, bookLevel);
+                            } else if (itemLevel == bookLevel) {
+                                result.addUnsafeEnchantment(enchantment, bookLevel + 1);
                             }
                         }
                     }
