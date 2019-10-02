@@ -1,12 +1,12 @@
 package tk.shanebee.enchBook;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.shanebee.enchBook.commands.CmdEnchBook;
 import tk.shanebee.enchBook.commands.TabEnchBook;
 import tk.shanebee.enchBook.events.AnvilPrepare;
-import tk.shanebee.enchBook.metrics.Metrics;
 
 @SuppressWarnings("ConstantConditions")
 public class EnchBook extends JavaPlugin {

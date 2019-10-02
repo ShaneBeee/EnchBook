@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="EnchBook:jar">
-    <output-path>$USER_HOME$/Desktop/Server/1-13-TESTING/plugins</output-path>
+    <output-path>$USER_HOME$/Desktop/Server/1-14-4-ENCHBOOK/plugins</output-path>
     <root id="archive" name="EnchBook.jar">
       <element id="module-output" name="EnchBook" />
     </root>
