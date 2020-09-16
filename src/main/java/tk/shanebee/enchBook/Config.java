@@ -9,6 +9,8 @@ public class Config implements Listener {
     final String PREFIX;
     public final boolean SAFE_ENCHANTS;
     public final boolean SAFE_BOOKS;
+    public final int MAX_LEVEL;
+    public final boolean ABOVE_VAN_REQUIRES_PERM;
 
     final String MSG_NO_PERM;
 
@@ -19,6 +21,8 @@ public class Config implements Listener {
         config.addDefault("Options.Prefix", "&7[&bEnchBook&7]");
         config.addDefault("Options.Safe Enchants", true);
         config.addDefault("Options.Safe Books", true);
+        config.addDefault("Options.Max Level", 10);
+        config.addDefault("Options.Above Vanilla Requires Permission", false);
 
 
 
@@ -40,6 +44,8 @@ public class Config implements Listener {
         this.PREFIX = config.getString("Options.Prefix");
         this.SAFE_ENCHANTS = config.getBoolean("Options.Safe Enchants");
         this.SAFE_BOOKS = config.getBoolean("Options.Safe Books");
+        this.MAX_LEVEL = config.getInt("Options.Max Level");
+        this.ABOVE_VAN_REQUIRES_PERM = config.getBoolean("Options.Above Vanilla Requires Permission");
         this.MSG_NO_PERM = config.getString("Messages.No Permission");
     }
 

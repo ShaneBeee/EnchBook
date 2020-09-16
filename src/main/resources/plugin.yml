@@ -16,3 +16,12 @@ permissions:
   enchbook.admin:
     description: Allows admins to use the enchbook commands
     default: op
+  enchbook.bypass.safe:
+    description: Allows a user to bypass safe enchants
+    default: op
+  enchbook.bypass.vanilla_max_level:
+    description: Allows a user to bypass vanilla max level
+    default: op
+  enchbook.bypass.max_level:
+    description: Allows a user to bypass max level
+    default: op
