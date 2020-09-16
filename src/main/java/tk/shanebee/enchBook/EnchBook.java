@@ -31,8 +31,8 @@ public class EnchBook extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.pluginConfig = null;
         Util.log("&aUNLOADED SUCCESSFULLY");
+        this.pluginConfig = null;
     }
 
     public static EnchBook getPlugin() {
