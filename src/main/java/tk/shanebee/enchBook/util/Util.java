@@ -11,7 +11,7 @@ public class Util {
     }
 
     public static void log(String message) {
-        Bukkit.getConsoleSender().sendMessage(getColString(EnchBook.getPlugin().getPluginConfig().PREFIX + message));
+        Bukkit.getConsoleSender().sendMessage(getColString(EnchBook.getPlugin().getPluginConfig().PREFIX + " " + message));
     }
 
 }
