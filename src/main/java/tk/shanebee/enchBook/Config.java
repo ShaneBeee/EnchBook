@@ -6,7 +6,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 
 public class Config implements Listener {
 
-    final String PREFIX;
+    public final String PREFIX;
     public final boolean SAFE_ENCHANTS;
     public final boolean SAFE_BOOKS;
     public final int MAX_LEVEL;

@@ -1,6 +1,5 @@
 package tk.shanebee.enchBook.commands;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,8 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import tk.shanebee.enchBook.Config;
 import tk.shanebee.enchBook.EnchBook;
+import tk.shanebee.enchBook.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,29 +20,27 @@ import java.util.List;
 public class CmdEnchBook implements CommandExecutor {
 
     private static EnchBook plugin;
+    private final String PREFIX;
+
     public CmdEnchBook(EnchBook instance) {
         plugin = instance;
+        PREFIX = Util.getColString(plugin.getPluginConfig().PREFIX);
     }
-
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        String prefix = ChatColor.GRAY + "[" +
-                (ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Options.Prefix")))
-                + ChatColor.GRAY + "]";
-
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             if (args.length >= 2) {
                 Player player = (Player) sender;
                 Material hand = player.getInventory().getItemInMainHand().getType();
 
-                if(args[0].equalsIgnoreCase("rename")) {
+                if (args[0].equalsIgnoreCase("rename")) {
                     if (hand != Material.ENCHANTED_BOOK) {
-                        player.sendMessage(prefix + ChatColor.RED + " You can only rename an enchanted book");
+                        player.sendMessage(PREFIX + ChatColor.RED + " You can only rename an enchanted book");
                         return true;
                     }
                     StringBuilder sb = new StringBuilder();
-                    for (int i = 1; i < args.length; i++){
+                    for (int i = 1; i < args.length; i++) {
                         sb.append(args[i]).append(" ");
                     }
                     String allArgs = sb.toString().trim();
@@ -52,16 +49,16 @@ public class CmdEnchBook implements CommandExecutor {
                     ItemMeta meta = item.getItemMeta();
                     meta.setDisplayName(newName);
                     item.setItemMeta(meta);
-                    player.sendMessage(prefix + ChatColor.GREEN + " You have successfully renamed your book to: " + newName);
+                    player.sendMessage(PREFIX + ChatColor.GREEN + " You have successfully renamed your book to: " + newName);
                     return true;
                 }
-                if(args[0].equalsIgnoreCase("addLore")) {
+                if (args[0].equalsIgnoreCase("addLore")) {
                     if (hand != Material.ENCHANTED_BOOK) {
-                        player.sendMessage(prefix + ChatColor.RED + " You can only rename an enchanted book");
+                        player.sendMessage(PREFIX + ChatColor.RED + " You can only rename an enchanted book");
                         return true;
                     }
                     StringBuilder sb = new StringBuilder();
-                    for (int i = 1; i < args.length; i++){
+                    for (int i = 1; i < args.length; i++) {
                         sb.append(args[i]).append(" ");
                     }
                     String allArgs = sb.toString().trim();
@@ -70,12 +67,12 @@ public class CmdEnchBook implements CommandExecutor {
                     ItemStack item = player.getInventory().getItemInMainHand();
                     ItemMeta meta = item.getItemMeta();
                     List<String> lore = new ArrayList<>();
-                    if(meta.hasLore()) lore = meta.getLore();
+                    if (meta.hasLore()) lore = meta.getLore();
 
                     lore.add(newLore);
                     meta.setLore(lore);
                     item.setItemMeta(meta);
-                    player.sendMessage(prefix + ChatColor.GREEN + " You have successfully add lore to your book: " + newLore);
+                    player.sendMessage(PREFIX + ChatColor.GREEN + " You have successfully add lore to your book: " + newLore);
                     return true;
                 }
                 String level = "";
@@ -96,7 +93,7 @@ public class CmdEnchBook implements CommandExecutor {
                 }
                 int max = ench.getMaxLevel();
                 if (lvl > max && plugin.getConfig().getBoolean("Options.Safe Enchants")) {
-                    player.sendMessage(prefix + ChatColor.RED + " That level is too high");
+                    player.sendMessage(PREFIX + ChatColor.RED + " That level is too high");
                     return true;
                 }
 
@@ -110,11 +107,11 @@ public class CmdEnchBook implements CommandExecutor {
 
                     String string = plugin.getConfig().getString("Messages.Create New Book");
                     String msg = (ChatColor.translateAlternateColorCodes('&', string.replace("{level}", level).replace("{ench}", enchant)));
-                    player.sendMessage(prefix + " " + msg);
+                    player.sendMessage(PREFIX + " " + msg);
 
                 } else if (args[0].equalsIgnoreCase("addEnchant")) {
                     if (hand != Material.ENCHANTED_BOOK) {
-                        player.sendMessage(prefix + ChatColor.RED + " You can only add enchantments to enchanted books");
+                        player.sendMessage(PREFIX + ChatColor.RED + " You can only add enchantments to enchanted books");
                         return true;
                     }
                     ItemStack book = player.getInventory().getItemInMainHand();
@@ -124,51 +121,51 @@ public class CmdEnchBook implements CommandExecutor {
 
                     String string = plugin.getConfig().getString("Messages.Added Enchant");
                     String msg = (ChatColor.translateAlternateColorCodes('&', string.replace("{level}", level).replace("{ench}", enchant)));
-                    player.sendMessage(prefix + " " + msg);
-                } else if(args[0].equalsIgnoreCase("removeEnchant")) {
+                    player.sendMessage(PREFIX + " " + msg);
+                } else if (args[0].equalsIgnoreCase("removeEnchant")) {
                     if (hand != Material.ENCHANTED_BOOK) {
-                        player.sendMessage(prefix + ChatColor.RED + " You can only remove enchantments from enchanted books");
+                        player.sendMessage(PREFIX + ChatColor.RED + " You can only remove enchantments from enchanted books");
                         return true;
                     }
                     ItemStack book = player.getInventory().getItemInMainHand();
                     ItemMeta meta = book.getItemMeta();
-                    if(!((EnchantmentStorageMeta) meta).hasStoredEnchant(ench)) {
-                        player.sendMessage(prefix + ChatColor.RED + " That book is not enchanted with " + ChatColor.AQUA + args[1].toUpperCase().replace("_", " "));
+                    if (!((EnchantmentStorageMeta) meta).hasStoredEnchant(ench)) {
+                        player.sendMessage(PREFIX + ChatColor.RED + " That book is not enchanted with " + ChatColor.AQUA + args[1].toUpperCase().replace("_", " "));
                         return true;
                     }
                     ((EnchantmentStorageMeta) meta).removeStoredEnchant(ench);
                     book.setItemMeta(meta);
                     String string = plugin.getConfig().getString("Messages.Removed Enchant");
                     String msg = (ChatColor.translateAlternateColorCodes('&', string.replace("{ench}", enchant)));
-                    player.sendMessage(prefix + " " + msg);
+                    player.sendMessage(PREFIX + " " + msg);
                 }
-            } else if(args.length == 1) {
-                if(args[0].equalsIgnoreCase("removeLore")) {
+            } else if (args.length == 1) {
+                if (args[0].equalsIgnoreCase("removeLore")) {
                     Player player = ((Player) sender);
                     ItemStack hand = player.getInventory().getItemInMainHand();
                     if (hand.getType() != Material.ENCHANTED_BOOK) {
-                        player.sendMessage(prefix + ChatColor.RED + " You can only remove lore from an enchanted book");
+                        player.sendMessage(PREFIX + ChatColor.RED + " You can only remove lore from an enchanted book");
                         return true;
                     }
                     ItemMeta meta = hand.getItemMeta();
-                    if(!meta.hasLore()) {
-                        player.sendMessage(prefix + ChatColor.RED + " This book does not have any more");
+                    if (!meta.hasLore()) {
+                        player.sendMessage(PREFIX + ChatColor.RED + " This book does not have any more");
                         return true;
                     }
                     meta.setLore(null);
                     hand.setItemMeta(meta);
-                    player.sendMessage(prefix + ChatColor.GREEN + " You have successfully remove all lore from your book");
+                    player.sendMessage(PREFIX + ChatColor.GREEN + " You have successfully remove all lore from your book");
                     return true;
                 }
             }
         }
 
-        if(args.length == 1) {
+        if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 plugin.reloadConfig();
                 plugin.reloadPluginConfig();
                 plugin.saveConfig();
-                sender.sendMessage(prefix + ChatColor.GREEN + " Config successfully reloaded");
+                sender.sendMessage(PREFIX + ChatColor.GREEN + " Config successfully reloaded");
                 return true;
             } else if (args[0].equalsIgnoreCase("about")) {
                 sender.sendMessage("");
@@ -193,10 +190,11 @@ public class CmdEnchBook implements CommandExecutor {
 
                 return true;
             } else {
-                sender.sendMessage(prefix + ChatColor.GOLD + " Correct Usage: /enchbook <about/add/new/reload>");
+                sender.sendMessage(PREFIX + ChatColor.GOLD + " Correct Usage: /enchbook <about/add/new/reload>");
                 return true;
             }
-        } return true;
+        }
+        return true;
     }
 
 }
