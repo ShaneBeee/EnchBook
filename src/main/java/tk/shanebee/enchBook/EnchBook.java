@@ -20,7 +20,7 @@ public class EnchBook extends JavaPlugin {
         Metrics metrics = new Metrics(this);
         this.pluginConfig = new Config(this);
 
-        prefix = ChatColor.translateAlternateColorCodes('&', "&7[" + this.pluginConfig.PREFIX + "&7] ");
+        prefix = getColString(this.pluginConfig.PREFIX + " ");
         this.getCommand("enchbook").setPermissionMessage(prefix + getColString(pluginConfig.MSG_NO_PERM));
         this.getCommand("enchbook").setExecutor(new CmdEnchBook(this));
         this.getCommand("enchbook").setTabCompleter(new TabEnchBook());
@@ -32,7 +32,7 @@ public class EnchBook extends JavaPlugin {
     @Override
     public void onDisable() {
         this.pluginConfig = null;
-        getServer().getConsoleSender().sendMessage(prefix + ChatColor.GREEN + "UNLOADED SUCCESSFULLY");
+        log("&aUNLOADED SUCCESSFULLY");
     }
 
     public Config getPluginConfig() {

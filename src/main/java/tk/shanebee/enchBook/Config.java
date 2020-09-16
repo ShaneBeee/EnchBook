@@ -16,7 +16,7 @@ public class Config implements Listener {
         FileConfiguration config = plugin.getConfig();
         PluginDescriptionFile pdfFile = plugin.getDescription();
 
-        config.addDefault("Options.Prefix", "&bEnchBook");
+        config.addDefault("Options.Prefix", "&7[&bEnchBook&7]");
         config.addDefault("Options.Safe Enchants", true);
         config.addDefault("Options.Safe Books", true);
 
