@@ -12,11 +12,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tk.shanebee.enchBook.Config;
 import tk.shanebee.enchBook.EnchBook;
 
-
 @SuppressWarnings("FieldCanBeLocal")
 public class AnvilPrepare implements Listener {
 
     private final EnchBook plugin;
+    private final boolean SAFE_ENCHANTS;
     private final boolean SAFE_BOOKS;
     private final int MAX_LEVEL;
     private final boolean REQ_PERM;
@@ -27,6 +27,7 @@ public class AnvilPrepare implements Listener {
     public AnvilPrepare(EnchBook instance) {
         this.plugin = instance;
         Config config = plugin.getPluginConfig();
+        SAFE_ENCHANTS = config.SAFE_ENCHANTS;
         SAFE_BOOKS = config.SAFE_BOOKS;
         MAX_LEVEL = config.MAX_LEVEL;
         REQ_PERM = config.ABOVE_VAN_REQUIRES_PERM;
@@ -34,23 +35,23 @@ public class AnvilPrepare implements Listener {
 
     @EventHandler
     public void onAnvilPrepare(PrepareAnvilEvent e) {
-        if (!(plugin.getPluginConfig().SAFE_ENCHANTS)) {
-            Player player = ((Player) e.getViewers().get(0));
-            ItemStack item = e.getInventory().getItem(0);
-            ItemStack book = e.getInventory().getItem(1);
+        Player player = ((Player) e.getViewers().get(0));
+        if (!SAFE_ENCHANTS || player.hasPermission(PERM_BYPASS_SAFE)) {
+            ItemStack FIRST_ITEM = e.getInventory().getItem(0);
+            ItemStack SECOND_ITEM = e.getInventory().getItem(1);
 
-            if ((item == null) || (book == null)) return;
+            if ((FIRST_ITEM == null) || (SECOND_ITEM == null)) return;
 
-            if (book.getType() == Material.ENCHANTED_BOOK) {
-                if (item.getType() != Material.ENCHANTED_BOOK) {
+            if (SECOND_ITEM.getType() == Material.ENCHANTED_BOOK) {
+                if (FIRST_ITEM.getType() != Material.ENCHANTED_BOOK) {
 
-                    ItemStack result = item.clone();
-                    ItemMeta bookMeta = book.getItemMeta();
+                    ItemStack result = FIRST_ITEM.clone();
+                    ItemMeta bookMeta = SECOND_ITEM.getItemMeta();
                     assert bookMeta != null;
                     for (Enchantment enchantment : ((EnchantmentStorageMeta) bookMeta).getStoredEnchants().keySet()) {
-                        if (enchantment.canEnchantItem(item)) {
+                        if (enchantment.canEnchantItem(FIRST_ITEM)) {
                             int bookLevel = ((EnchantmentStorageMeta) bookMeta).getStoredEnchantLevel(enchantment);
-                            int itemLevel = item.getEnchantmentLevel(enchantment);
+                            int itemLevel = FIRST_ITEM.getEnchantmentLevel(enchantment);
                             if (itemLevel < bookLevel) {
                                 result.addUnsafeEnchantment(enchantment, bookLevel);
                             } else if (itemLevel == bookLevel) {
@@ -62,8 +63,8 @@ public class AnvilPrepare implements Listener {
                 } else {
                     ItemStack result = new ItemStack(Material.ENCHANTED_BOOK);
                     ItemMeta newMeta = result.getItemMeta();
-                    ItemMeta bookMeta = book.getItemMeta();
-                    ItemMeta itemMeta = item.getItemMeta();
+                    ItemMeta bookMeta = SECOND_ITEM.getItemMeta();
+                    ItemMeta itemMeta = FIRST_ITEM.getItemMeta();
 
                     for (Enchantment enchantment : Enchantment.values()) {
                         assert bookMeta != null;
