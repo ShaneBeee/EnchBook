@@ -92,9 +92,11 @@ public class CmdEnchBook implements CommandExecutor {
                     return true;
                 }
                 int max = ench.getMaxLevel();
-                if (lvl > max && plugin.getConfig().getBoolean("Options.Safe Enchants")) {
-                    player.sendMessage(PREFIX + ChatColor.RED + " That level is too high");
-                    return true;
+                if (lvl > max && plugin.getPluginConfig().SAFE_BOOKS) {
+                    if (!player.hasPermission("enchbook.bypass.safe")) {
+                        player.sendMessage(PREFIX + ChatColor.RED + " That level is too high");
+                        return true;
+                    }
                 }
 
                 if (args[0].equalsIgnoreCase("newbook")) {

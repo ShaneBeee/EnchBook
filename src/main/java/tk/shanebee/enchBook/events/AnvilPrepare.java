@@ -12,12 +12,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tk.shanebee.enchBook.Config;
 import tk.shanebee.enchBook.EnchBook;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @SuppressWarnings("FieldCanBeLocal")
 public class AnvilPrepare implements Listener {
 
     private final EnchBook plugin;
     private final boolean SAFE_ENCHANTS;
     private final boolean SAFE_BOOKS;
+    private final boolean IGNORE_CONFLICTS;
     private final int MAX_LEVEL;
     private final boolean REQ_PERM;
     private final String PERM_BYPASS_SAFE = "enchbook.bypass.safe";
@@ -29,6 +32,7 @@ public class AnvilPrepare implements Listener {
         Config config = plugin.getPluginConfig();
         SAFE_ENCHANTS = config.SAFE_ENCHANTS;
         SAFE_BOOKS = config.SAFE_BOOKS;
+        IGNORE_CONFLICTS = config.IGNORE_CONFLICTS;
         MAX_LEVEL = config.MAX_LEVEL;
         REQ_PERM = config.ABOVE_VAN_REQUIRES_PERM;
     }
@@ -49,7 +53,7 @@ public class AnvilPrepare implements Listener {
                     ItemMeta bookMeta = SECOND_ITEM.getItemMeta();
                     assert bookMeta != null;
                     for (Enchantment enchantment : ((EnchantmentStorageMeta) bookMeta).getStoredEnchants().keySet()) {
-                        if (enchantment.canEnchantItem(FIRST_ITEM)) {
+                        if (canEnchant(FIRST_ITEM, enchantment)) {
                             int bookLevel = ((EnchantmentStorageMeta) bookMeta).getStoredEnchantLevel(enchantment);
                             int itemLevel = FIRST_ITEM.getEnchantmentLevel(enchantment);
                             if (itemLevel < bookLevel) {
@@ -103,6 +107,21 @@ public class AnvilPrepare implements Listener {
             }
         }
         return true;
+    }
+
+    // Check if the ItemStack can accept this enchant
+    public boolean canEnchant(ItemStack itemStack, Enchantment enchantment) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        AtomicBoolean canEnchant = new AtomicBoolean(enchantment.canEnchantItem(itemStack));
+
+        if (itemMeta != null && !IGNORE_CONFLICTS) {
+            itemMeta.getEnchants().keySet().forEach(ench -> {
+                if (ench != enchantment && ench.conflictsWith(enchantment)) {
+                    canEnchant.set(false);
+                }
+            });
+        }
+        return canEnchant.get();
     }
 
 }

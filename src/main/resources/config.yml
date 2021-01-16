@@ -10,8 +10,12 @@ Options:
   # This can be bypassed with the permission 'enchbook.bypass.safe'
   Safe Enchants: true
 
+  # When enchanting an item, ignore conflicting enchants (ex: smite + sharpness)
+  Ignore Conflicts: false
+
   # If safe books is true, players will not be able to join 2 of the same books (which would increase the level by 1)
-  # to increase the level over the max possible level for that enchant
+  # to increase the level over the max possible level for that enchant.
+  # This also blocks creating new books with the '/enchbook newbook' that have higher than vanilla max levels.
   # This can be bypassed with the permission 'enchbook.bypass.safe'
   Safe Books: true
 
