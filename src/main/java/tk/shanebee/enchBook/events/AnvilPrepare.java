@@ -23,8 +23,10 @@ public class AnvilPrepare implements Listener {
     private final boolean IGNORE_CONFLICTS;
     private final int MAX_LEVEL;
     private final boolean REQ_PERM;
+    private final boolean REQ_PERM_ITEM;
     private final String PERM_BYPASS_SAFE = "enchbook.bypass.safe";
     private final String PERM_BYPASS_VANILLA = "enchbook.bypass.vanilla_max_level";
+    private final String PERM_BYPASS_VANILLA_ITEM = "enchbook.bypass.vanilla_max_level_item";
     private final String PERM_BYPASS_MAX = "enchbook.bypass.max_level";
 
     public AnvilPrepare(EnchBook instance) {
@@ -35,6 +37,7 @@ public class AnvilPrepare implements Listener {
         IGNORE_CONFLICTS = config.IGNORE_CONFLICTS;
         MAX_LEVEL = config.MAX_LEVEL;
         REQ_PERM = config.ABOVE_VAN_REQUIRES_PERM;
+        REQ_PERM_ITEM = config.ABOVE_VAN_REQUIRES_PERM_ITEM;
     }
 
     @EventHandler
@@ -59,6 +62,9 @@ public class AnvilPrepare implements Listener {
                             if (itemLevel < bookLevel) {
                                 result.addUnsafeEnchantment(enchantment, bookLevel);
                             } else if (itemLevel == bookLevel) {
+                                if (itemLevel >= enchantment.getMaxLevel() && REQ_PERM_ITEM && !player.hasPermission(PERM_BYPASS_VANILLA_ITEM)) {
+                                    continue;
+                                }
                                 result.addUnsafeEnchantment(enchantment, bookLevel + 1);
                             }
                         }

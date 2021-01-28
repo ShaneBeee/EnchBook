@@ -20,6 +20,7 @@ public class Config implements Listener {
     public boolean IGNORE_CONFLICTS;
     public int MAX_LEVEL;
     public boolean ABOVE_VAN_REQUIRES_PERM;
+    public boolean ABOVE_VAN_REQUIRES_PERM_ITEM;
     public String MSG_NO_PERM;
 
     Config(EnchBook plugin) {
@@ -74,6 +75,7 @@ public class Config implements Listener {
         this.IGNORE_CONFLICTS = config.getBoolean("Options.Ignore Conflicts");
         this.MAX_LEVEL = config.getInt("Options.Max Level");
         this.ABOVE_VAN_REQUIRES_PERM = config.getBoolean("Options.Above Vanilla Requires Permission");
+        this.ABOVE_VAN_REQUIRES_PERM_ITEM = config.getBoolean("Options.Above Vanilla Item Requires Permission");
         this.MSG_NO_PERM = config.getString("Messages.No Permission");
     }
 
