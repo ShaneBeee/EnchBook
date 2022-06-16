@@ -72,6 +72,9 @@ public class AnvilPrepare implements Listener {
                         }
                     }
                     event.setResult(result);
+                    if (inventory.getRepairCost() < 0) {
+                        inventory.setRepairCost(5);
+                    }
 
                 } else {
                     ItemStack result = new ItemStack(Material.ENCHANTED_BOOK);
