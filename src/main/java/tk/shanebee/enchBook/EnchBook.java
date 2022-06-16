@@ -1,10 +1,9 @@
 package tk.shanebee.enchBook;
 
 import org.bstats.bukkit.Metrics;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.shanebee.enchBook.commands.CmdEnchBook;
-import tk.shanebee.enchBook.commands.TabEnchBook;
-import tk.shanebee.enchBook.events.AnvilPrepare;
 import tk.shanebee.enchBook.util.Util;
 
 @SuppressWarnings("ConstantConditions")
@@ -14,18 +13,12 @@ public class EnchBook extends JavaPlugin {
     private Config pluginConfig;
 
     @Override
-    @SuppressWarnings("unused")
     public void onEnable() {
         INSTANCE = this;
-        Metrics metrics = new Metrics(this);
+        new Metrics(this);
         this.pluginConfig = new Config(this);
 
-        String permMsg = Util.getColString(this.pluginConfig.PREFIX + " " + pluginConfig.MSG_NO_PERM);
-        this.getCommand("enchbook").setPermissionMessage(permMsg);
-        this.getCommand("enchbook").setExecutor(new CmdEnchBook(this));
-        this.getCommand("enchbook").setTabCompleter(new TabEnchBook());
-        this.getServer().getPluginManager().registerEvents(new AnvilPrepare(this), this);
-
+        initiateCommand();
         Util.log("&aLOADED SUCCESSFULLY");
     }
 
@@ -33,6 +26,13 @@ public class EnchBook extends JavaPlugin {
     public void onDisable() {
         Util.log("&aUNLOADED SUCCESSFULLY");
         this.pluginConfig = null;
+    }
+
+    private void initiateCommand() {
+        PluginCommand command = this.getCommand("enchbook");
+        String permMsg = Util.getColString(pluginConfig.PREFIX + " " + pluginConfig.MSG_NO_PERM);
+        command.setPermissionMessage(permMsg);
+        command.setExecutor(new CmdEnchBook(this));
     }
 
     public static EnchBook getPlugin() {
