@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -41,11 +42,12 @@ public class AnvilPrepare implements Listener {
     }
 
     @EventHandler
-    public void onAnvilPrepare(PrepareAnvilEvent e) {
-        Player player = ((Player) e.getViewers().get(0));
+    public void onAnvilPrepare(PrepareAnvilEvent event) {
+        Player player = ((Player) event.getViewers().get(0));
+        AnvilInventory inventory = event.getInventory();
         if (!SAFE_ENCHANTS || player.hasPermission(PERM_BYPASS_SAFE)) {
-            ItemStack FIRST_ITEM = e.getInventory().getItem(0);
-            ItemStack SECOND_ITEM = e.getInventory().getItem(1);
+            ItemStack FIRST_ITEM = inventory.getItem(0);
+            ItemStack SECOND_ITEM = inventory.getItem(1);
 
             if ((FIRST_ITEM == null) || (SECOND_ITEM == null)) return;
 
@@ -69,7 +71,8 @@ public class AnvilPrepare implements Listener {
                             }
                         }
                     }
-                    e.setResult(result);
+                    event.setResult(result);
+
                 } else {
                     ItemStack result = new ItemStack(Material.ENCHANTED_BOOK);
                     ItemMeta newMeta = result.getItemMeta();
@@ -94,7 +97,7 @@ public class AnvilPrepare implements Listener {
                         }
                     }
                     result.setItemMeta(newMeta);
-                    e.setResult(result);
+                    event.setResult(result);
                 }
             }
         }
