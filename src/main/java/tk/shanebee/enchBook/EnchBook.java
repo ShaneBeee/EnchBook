@@ -1,9 +1,11 @@
 package tk.shanebee.enchBook;
 
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.shanebee.enchBook.commands.CmdEnchBook;
+import tk.shanebee.enchBook.events.AnvilPrepare;
 import tk.shanebee.enchBook.util.Util;
 
 @SuppressWarnings("ConstantConditions")
@@ -33,6 +35,7 @@ public class EnchBook extends JavaPlugin {
         String permMsg = Util.getColString(pluginConfig.PREFIX + " " + pluginConfig.MSG_NO_PERM);
         command.setPermissionMessage(permMsg);
         command.setExecutor(new CmdEnchBook(this));
+        Bukkit.getPluginManager().registerEvents(new AnvilPrepare(this), this);
     }
 
     public static EnchBook getPlugin() {
