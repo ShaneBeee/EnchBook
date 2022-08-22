@@ -17,7 +17,7 @@ public class EnchBook extends JavaPlugin {
     @Override
     public void onEnable() {
         INSTANCE = this;
-        new Metrics(this);
+        new Metrics(this, 3606);
         this.pluginConfig = new Config(this);
 
         initiateCommand();
