@@ -2,6 +2,7 @@ package tk.shanebee.enchBook.events;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tk.shanebee.enchBook.Config;
 import tk.shanebee.enchBook.EnchBook;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -43,7 +45,10 @@ public class AnvilPrepare implements Listener {
 
     @EventHandler
     public void onAnvilPrepare(PrepareAnvilEvent event) {
-        Player player = ((Player) event.getViewers().get(0));
+        List<HumanEntity> viewers = event.getViewers();
+        if (viewers.size() == 0) return;
+
+        Player player = (Player) viewers.get(0);
         AnvilInventory inventory = event.getInventory();
         if (!SAFE_ENCHANTS || player.hasPermission(PERM_BYPASS_SAFE)) {
             ItemStack FIRST_ITEM = inventory.getItem(0);
